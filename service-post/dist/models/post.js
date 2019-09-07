@@ -11,9 +11,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const postSchema = new _connection.default.Schema({
   content: String,
-  personId: Number,
+  personId: String,
   tags: [String],
   likes: [String],
+  isLiked: Boolean,
   likesLength: Number
 });
 

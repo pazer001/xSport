@@ -1,25 +1,31 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Icon, CardItem, Body, Text} from "native-base";
-import {Card, Button} from 'react-native-elements'
+import {CardItem, Body, Button, Text} from "native-base";
+import {Card,} from 'react-native-elements'
 import {Textarea} from "native-base";
+import APIStore from "../../state/APIStore";
+import ViewStoreContext from "../../state/ViewStore";
 
 const CreatePost = props => {
-    const {show} = props;
-    if (!show) return null;
+    const [content, setContent] = useState(false);
+    const ViewStore     =   useContext(ViewStoreContext);
+    const createPost = async () => {
+        await APIStore.actions.post.create(content)
+        ViewStore.actions.toggleShowCreatePost()
+    };
+
     return <View style={styles.createPost}>
         <Card>
-            <CardItem header>
-                <Text>Create a post</Text>
-            </CardItem>
+            {/*<CardItem header>*/}
+                <Button full onPress={createPost}><Text>Send</Text></Button>
+            {/*</CardItem>*/}
             <CardItem>
                 <Body>
-                    <Textarea rowSpan={5} placeholder="Textarea"/>
+                    <Textarea full onChangeText={content => setContent(content)} rowSpan={10} placeholder="Textarea"/>
                 </Body>
             </CardItem>
             <CardItem footer>
-                <Icon type="AntDesign" name="like2"/>
-                <Icon type="AntDesign" name="dislike2"/>
+
             </CardItem>
         </Card>
     </View>

@@ -24,7 +24,18 @@ const APIStore = observable({
             like: async (_id, personId) => {
                 if (!_id) return;
                 const url = `${APIStore.actions.post.base()}/like/${_id}`;
-                await axios.patch(url, {personId}, config);
+                await axios.patch(url, null, config);
+                await APIStore.actions.post.get();
+            },
+            dislike: async (_id) => {
+                if (!_id) return;
+                const url = `${APIStore.actions.post.base()}/dislike/${_id}`;
+                await axios.patch(url, null, config);
+                await APIStore.actions.post.get();
+            },
+            create: async content => {
+                const url = `${APIStore.actions.post.base()}`;
+                await axios.post(url, {content}, config);
                 await APIStore.actions.post.get();
             }
         }

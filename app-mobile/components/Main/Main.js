@@ -6,16 +6,15 @@ import {StyleSheet, View} from "react-native";
 import {observer} from 'mobx-react-lite';
 import ViewStoreContext from "../../state/ViewStore";
 
-
 const Main  =   observer(props   =>  {
-
+    const ViewStore     =   useContext(ViewStoreContext);
     return <View style={styles.container}>
-        <CreatePost show={ViewStoreContext.showCreatePost} />
-        <Posts/>
+        {ViewStore.showCreatePost && <CreatePost />}
+        {!ViewStore.showCreatePost && <Posts/>}
         <Fab
             direction="up"
             position="bottomRight"
-            onPress={() => ViewStoreContext.showCreatePost(!ViewStoreContext.showCreatePost)}
+            onPress={ViewStore.actions.toggleShowCreatePost}
         >
             <Icon type="FontAwesome5" name="pencil-alt"/>
         </Fab>

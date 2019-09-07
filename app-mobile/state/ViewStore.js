@@ -2,7 +2,13 @@ import {createContext} from 'react';
 import {observable} from 'mobx';
 
 const ViewStore     =   observable({
-    showCreatePost: false
+    showCreatePost: false,
+    actions: {
+        toggleShowCreatePost: () => {
+            console.log(!ViewStore.showCreatePost)
+            ViewStore.showCreatePost    =   !ViewStore.showCreatePost;
+        }
+    }
 });
 
-export default ViewStoreContext   =   createContext(ViewStore);
+export default createContext(ViewStore);

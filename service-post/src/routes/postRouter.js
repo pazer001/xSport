@@ -1,20 +1,25 @@
-const express   =   require('express');
+const express = require('express');
 import Post from '../models/post';
 
-const router    =   express.Router();
+const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const {personId = 'A12b'}    =   req.headers;
+    const {authorization} = req.headers;
+    const personId  =   authorization;
+
     try {
-        const posts =   await Post.aggregate([
+        const posts = await Post.aggregate([
             {$match: {}},
-            {$project: {
+            {
+                $project: {
                     isLiked: {$in: [personId, '$likes']},
                     content: "$content",
                     personId: "$personId",
                     tags: "$tags",
-                    likedLength: {$size: '$likes'}}
-            }]);
+                    likesLength: {$size: "$likes"}
+                }
+            }
+        ]);
 
         res.send(posts)
     } catch (e) {
@@ -24,10 +29,18 @@ router.get('/', async (req, res) => {
 });
 
 router.patch('/like/:_id', async (req, res) => {
-    const {_id}  =   req.params;
-    const {personId}    =   req.body;
+    const {_id} = req.params;
+    const {authorization} = req.headers;
+    const personId  =   authorization;
+
     try {
-        const posts =   await Post.updateOne({_id}, {$push: {likes: personId}});
+        const posts = await Post.updateOne(
+            {_id},
+            {
+                $push: {likes: personId},
+                isLiked: true
+            }
+        );
         res.send(posts)
     } catch (e) {
         console.error(e);
@@ -35,4 +48,45 @@ router.patch('/like/:_id', async (req, res) => {
     }
 });
 
-module.exports  =   router;
+router.patch('/dislike/:_id', async (req, res) => {
+    const {_id} = req.params;
+    const {authorization} = req.headers;
+    const personId  =   authorization;
+
+    try {
+        const posts = await Post.updateOne(
+            {_id},
+            {
+                $pull: {likes: personId},
+                isLiked: false
+            }
+        );
+        res.send(posts)
+    } catch (e) {
+        console.error(e);
+        res.status(500).json();
+    }
+});
+
+router.post('/', async (req, res) => {
+    const {content} = req.body;
+    const {authorization} = req.headers;
+    const personId  =   authorization;
+
+    try {
+        const posts = await Post.create(
+            {
+                content,
+                personId,
+                tags: [],
+                likes: []
+            }
+        );
+        res.send(posts)
+    } catch (e) {
+        console.error(e);
+        res.status(500).json();
+    }
+});
+
+module.exports = router;

@@ -9,8 +9,9 @@ const express = require('express');
 const router = express.Router();
 router.get('/', async (req, res) => {
   const {
-    personId = 'A12b'
+    authorization
   } = req.headers;
+  const personId = authorization;
 
   try {
     const posts = await _post.default.aggregate([{
@@ -23,8 +24,8 @@ router.get('/', async (req, res) => {
         content: "$content",
         personId: "$personId",
         tags: "$tags",
-        likedLength: {
-          $size: '$likes'
+        likesLength: {
+          $size: "$likes"
         }
       }
     }]);
@@ -39,8 +40,9 @@ router.patch('/like/:_id', async (req, res) => {
     _id
   } = req.params;
   const {
-    personId
-  } = req.body;
+    authorization
+  } = req.headers;
+  const personId = authorization;
 
   try {
     const posts = await _post.default.updateOne({
@@ -48,7 +50,54 @@ router.patch('/like/:_id', async (req, res) => {
     }, {
       $push: {
         likes: personId
-      }
+      },
+      isLiked: true
+    });
+    res.send(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json();
+  }
+});
+router.patch('/dislike/:_id', async (req, res) => {
+  const {
+    _id
+  } = req.params;
+  const {
+    authorization
+  } = req.headers;
+  const personId = authorization;
+
+  try {
+    const posts = await _post.default.updateOne({
+      _id
+    }, {
+      $pull: {
+        likes: personId
+      },
+      isLiked: false
+    });
+    res.send(posts);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json();
+  }
+});
+router.post('/', async (req, res) => {
+  const {
+    content
+  } = req.body;
+  const {
+    authorization
+  } = req.headers;
+  const personId = authorization;
+
+  try {
+    const posts = await _post.default.create({
+      content,
+      personId,
+      tags: [],
+      likes: []
     });
     res.send(posts);
   } catch (e) {
