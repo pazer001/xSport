@@ -12,13 +12,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const postSchema = new _connection.default.Schema({
   content: String,
   personId: Number,
-  tags: [String],
-  likes: [String],
-  likesLength: Number
+  tags: [String]
 });
 
 const Post = _connection.default.model('Post', postSchema);
 
 var _default = Post;
 exports.default = _default;
-//# sourceMappingURL=post.js.map
+//# sourceMappingURL=sportModel.js.map

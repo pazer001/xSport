@@ -9,16 +9,16 @@ var _connection = _interopRequireDefault(require("../connection"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const postSchema = new _connection.default.Schema({
-  content: String,
-  personId: Number,
-  tags: [String],
-  likes: [String],
-  likesLength: Number
+const sportSchema = new _connection.default.Schema({
+  player: String,
+  team: String,
+  league: String,
+  country: String,
+  sport: Number
 });
 
-const Post = _connection.default.model('Post', postSchema);
+const Sport = _connection.default.model('Sport', sportSchema);
 
-var _default = Post;
+var _default = Sport;
 exports.default = _default;
-//# sourceMappingURL=post.js.map
+//# sourceMappingURL=sportModel.js.map

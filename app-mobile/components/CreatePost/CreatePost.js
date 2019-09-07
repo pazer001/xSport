@@ -1,21 +1,26 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import { Card, Button } from 'react-native-elements'
-import { Textarea } from "native-base";
-import MainContext from "../../state/MainContext";
+import {Icon, CardItem, Body, Text} from "native-base";
+import {Card, Button} from 'react-native-elements'
+import {Textarea} from "native-base";
 
-const CreatePost    =   props   =>  {
-    const {show}    =   props;
-    const mainContext   =   useContext(MainContext);
-    console.log(mainContext)
-    if(!show) return null;
+const CreatePost = props => {
+    const {show} = props;
+    if (!show) return null;
     return <View style={styles.createPost}>
         <Card>
-            <Textarea rowSpan={5}  placeholder="Textarea" />
-            <Button title="Send"
-                    // onPress={() => this.setState({ active: !this.state.active })}
-                    containerStyle={styles.button}
-            />
+            <CardItem header>
+                <Text>Create a post</Text>
+            </CardItem>
+            <CardItem>
+                <Body>
+                    <Textarea rowSpan={5} placeholder="Textarea"/>
+                </Body>
+            </CardItem>
+            <CardItem footer>
+                <Icon type="AntDesign" name="like2"/>
+                <Icon type="AntDesign" name="dislike2"/>
+            </CardItem>
         </Card>
     </View>
 };
@@ -26,11 +31,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignSelf: 'stretch'
     },
-    button: {
-        marginTop: 10
-    },
     input: {
         height: 150
+    },
+    footer: {
+        flex: 1,
+        alignSelf: 'stretch'
     }
 });
 

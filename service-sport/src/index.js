@@ -3,10 +3,10 @@ import helmet from 'helmet';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 
-const postRouter = require('./routes/postRouter');
+const sportRouter = require('./routes/sportRouter');
 
-const PORT = 8082;
-const SERVICE_NAME = 'post';
+const PORT = 8081;
+const SERVICE_NAME = 'sport';
 
 const app = express();
 
@@ -16,6 +16,6 @@ app.use(compression({level: 9}));
 app.use(bodyParser.json());
 
 
-app.use('/post', postRouter);
+app.use('/sport', sportRouter);
 
 app.listen(PORT, () => console.log(`Service ${SERVICE_NAME} is running on port ${PORT}`));

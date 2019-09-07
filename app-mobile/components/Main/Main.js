@@ -3,21 +3,24 @@ import CreatePost from "../CreatePost/CreatePost";
 import Posts from "../Posts/Posts";
 import {Fab, Icon} from "native-base";
 import {StyleSheet, View} from "react-native";
-import MainContext from "../../state/MainContext";
+import {observer} from 'mobx-react-lite';
+import ViewStoreContext from "../../state/ViewStore";
 
-const Main  =   props   =>  {
-    const {view}    =   useContext(MainContext);
+
+const Main  =   observer(props   =>  {
+
     return <View style={styles.container}>
-        <CreatePost show={view.showCreatePost} />
+        <CreatePost show={ViewStoreContext.showCreatePost} />
         <Posts/>
         <Fab
             direction="up"
             position="bottomRight"
+            onPress={() => ViewStoreContext.showCreatePost(!ViewStoreContext.showCreatePost)}
         >
-            <Icon name="share"/>
+            <Icon type="FontAwesome5" name="pencil-alt"/>
         </Fab>
     </View>
-};
+});
 
 const styles = StyleSheet.create({
     container: {

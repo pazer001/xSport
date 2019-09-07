@@ -8,56 +8,49 @@ const express = require('express');
 
 const router = express.Router();
 router.get('/', async (req, res) => {
+  const {
+    personId = 'A12b'
+  } = req.headers;
+
   try {
-    const posts = await _post.default.find({});
+    const posts = await _post.default.aggregate([{
+      $match: {}
+    }, {
+      $project: {
+        isLiked: {
+          $in: [personId, '$likes']
+        },
+        content: "$content",
+        personId: "$personId",
+        tags: "$tags",
+        likedLength: {
+          $size: '$likes'
+        }
+      }
+    }]);
     res.send(posts);
   } catch (e) {
     console.error(e);
     res.status(500).json();
   }
 });
-router.get('/:id', async (req, res) => {
+router.patch('/like/:_id', async (req, res) => {
   const {
-    id
+    _id
   } = req.params;
+  const {
+    personId
+  } = req.body;
 
   try {
-    const country = await Country.findByPk(id);
-    res.json(country);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json();
-  }
-});
-router.get('/name/:name', async (req, res) => {
-  const {
-    name
-  } = req.params;
-
-  try {
-    const country = await Country.findOne({
-      where: {
-        name
+    const posts = await _post.default.updateOne({
+      _id
+    }, {
+      $push: {
+        likes: personId
       }
     });
-    res.json(country);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json();
-  }
-});
-router.get('/code/:code', async (req, res) => {
-  const {
-    code
-  } = req.params;
-
-  try {
-    const country = await Country.findOne({
-      where: {
-        code
-      }
-    });
-    res.json(country);
+    res.send(posts);
   } catch (e) {
     console.error(e);
     res.status(500).json();

@@ -10,10 +10,10 @@ var _bodyParser = _interopRequireDefault(require("body-parser"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const postRouter = require('./routes/postRouter');
+const sportRouter = require('./routes/sportRouter');
 
-const PORT = 8082;
-const SERVICE_NAME = 'post';
+const PORT = 8081;
+const SERVICE_NAME = 'sport';
 const app = (0, _express.default)(); // Basic middleware
 
 app.use((0, _helmet.default)());
@@ -21,6 +21,6 @@ app.use((0, _compression.default)({
   level: 9
 }));
 app.use(_bodyParser.default.json());
-app.use('/post', postRouter);
+app.use('/sport', sportRouter);
 app.listen(PORT, () => console.log(`Service ${SERVICE_NAME} is running on port ${PORT}`));
 //# sourceMappingURL=index.js.map
